@@ -6,28 +6,19 @@ const path    = require('path');
 const app  = express();
 const PORT = process.env.PORT || 3000;
 
-const SHEET_ID = '1wfHx4_JkhgqCBdMzFNFuiZdoAxCSpwOsAzHzapiUpIQ';
-
-const ABAS_MESES = [
-  { aba: 'Janeiro',   label: 'Janeiro 2026',   ano: 2026, mes: 1 },
-  { aba: 'Fevereiro', label: 'Fevereiro 2026',  ano: 2026, mes: 2 },
-  { aba: 'Marco',     label: 'Março 2026',      ano: 2026, mes: 3 },
-  { aba: 'Abril',     label: 'Abril 2026',      ano: 2026, mes: 4 },
-  { aba: 'Maio',      label: 'Maio 2026',       ano: 2026, mes: 5 },
-  { aba: 'Junho',     label: 'Junho 2026',      ano: 2026, mes: 6 },
-  { aba: 'Julho',     label: 'Julho 2026',      ano: 2026, mes: 7 },
-  { aba: 'Agosto',    label: 'Agosto 2026',     ano: 2026, mes: 8 },
-  { aba: 'Setembro',  label: 'Setembro 2026',   ano: 2026, mes: 9 },
-  { aba: 'Outubro',   label: 'Outubro 2026',    ano: 2026, mes: 10 },
-  { aba: 'Novembro',  label: 'Novembro 2026',   ano: 2026, mes: 11 },
-  { aba: 'Dezembro',  label: 'Dezembro 2026',   ano: 2026, mes: 12 },
+// Cada mês tem sua própria planilha (Google Sheets separados)
+const PLANILHAS_MESES = [
+  { sheetId: '1qiASPWrCV0vlRCDt3MQ64W1r6sgd5p6t5fYfsJ73iBQ', aba: 'Janeiro',   label: 'Janeiro 2026',   ano: 2026, mes: 1 },
+  { sheetId: '1KCjDOnsi0K7cC59NAcbc_UIVaK_2XjS47coaKQ0MOEw', aba: 'Fevereiro', label: 'Fevereiro 2026', ano: 2026, mes: 2 },
+  { sheetId: '1VAGZ28b8PKSmTO_IHU98_Z-dvJ18W1myrxK7lBkjabU', aba: 'Marco',     label: 'Março 2026',     ano: 2026, mes: 3 },
+  { sheetId: '1CPB5xo3cR--1JENpcOdPBbUU7vw4yjYRurZ7qhH49hE', aba: 'Abril',     label: 'Abril 2026',     ano: 2026, mes: 4 },
 ];
 
 const cache = {};
 let periodosDisponiveis = [];
 
-async function lerAba(nomeAba) {
-  const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(nomeAba)}`;
+async function lerPlanilha(sheetId) {
+  const url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:json`;
   const resp = await axios.get(url, {
     headers: { 'User-Agent': 'Mozilla/5.0' },
     timeout: 20000,
@@ -94,17 +85,17 @@ function calcularMetricas(rows) {
 
 async function carregarTodos() {
   const disponiveis = [];
-  for (const { aba, label, ano, mes } of ABAS_MESES) {
+  for (const { sheetId, aba, label, ano, mes } of PLANILHAS_MESES) {
     try {
-      const rows = await lerAba(aba);
+      const rows = await lerPlanilha(sheetId);
       if (rows.length > 1) {
         const metricas = calcularMetricas(rows);
         cache[aba] = { dados: rows, metricas, updatedAt: new Date().toISOString() };
         disponiveis.push({ aba, label, ano, mes, total: rows.length });
-        console.log(`✅ Aba "${aba}" carregada: ${rows.length} chamados`);
+        console.log(`✅ "${label}" carregada: ${rows.length} chamados`);
       }
     } catch (e) {
-      // Ignorar abas inexistentes
+      console.error(`❌ Erro ao carregar "${label}": ${e.message}`);
     }
   }
   periodosDisponiveis = disponiveis.sort((a, b) => a.ano !== b.ano ? a.ano - b.ano : a.mes - b.mes);
