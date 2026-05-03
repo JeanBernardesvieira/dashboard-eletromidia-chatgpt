@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dashboard Operacional | Eletromidia GO</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <main class="app">
+    <section class="hero glass fade-in">
+      <div>
+        <p class="eyebrow">Eletromidia GO • Gestão Técnica</p>
+        <h1>Dashboard Operacional de Chamados</h1>
+        <p class="subtitle">Evolução dos OFFs, reincidência, causa raiz, pontos críticos, técnico, área e ambiente.</p>
+      </div>
+      <div class="hero-actions">
+        <button id="refreshBtn">Atualizar dados</button>
+        <span id="statusBadge" class="badge">Carregando...</span>
+      </div>
+    </section>
+
+    <section class="cards grid-4 fade-in delay-1">
+      <article class="card"><span>Total de registros</span><strong id="totalRegistros">-</strong><small>Corretivo + preventivo</small></article>
+      <article class="card danger"><span>Chamados OFF</span><strong id="totalOff">-</strong><small>Foco principal</small></article>
+      <article class="card"><span>Corretivos</span><strong id="totalCorretivos">-</strong><small>Atuação reativa</small></article>
+      <article class="card success"><span>Preventivos</span><strong id="totalPreventivos">-</strong><small>Dado complementar</small></article>
+    </section>
+
+    <section class="filters glass fade-in delay-2">
+      <label>Mês
+        <select id="monthFilter"><option value="all">Todos</option></select>
+      </label>
+      <label>Área
+        <select id="areaFilter"><option value="all">Todas</option></select>
+      </label>
+      <label>Técnico
+        <select id="techFilter"><option value="all">Todos</option></select>
+      </label>
+      <label>Ambiente
+        <select id="envFilter"><option value="all">Todos</option></select>
+      </label>
+    </section>
+
+    <section class="grid-2 fade-in delay-3">
+      <article class="panel"><h2>Evolução mensal dos OFFs</h2><canvas id="monthlyChart"></canvas></article>
+      <article class="panel"><h2>Corretivo x Preventivo</h2><canvas id="activityChart"></canvas></article>
+    </section>
+
+    <section class="grid-2 fade-in delay-4">
+      <article class="panel"><h2>Ranking inteligente de criticidade</h2><div id="criticalList" class="rank-list"></div></article>
+      <article class="panel"><h2>Causa raiz dos OFFs</h2><canvas id="causeChart"></canvas></article>
+    </section>
+
+    <section class="grid-3 fade-in delay-5">
+      <article class="panel"><h2>OFF por área</h2><canvas id="areaChart"></canvas></article>
+      <article class="panel"><h2>OFF por técnico</h2><canvas id="techChart"></canvas></article>
+      <article class="panel"><h2>OFF por ambiente</h2><canvas id="envChart"></canvas></article>
+    </section>
+
+    <section class="grid-2 fade-in delay-6">
+      <article class="panel"><h2>Top 10 OFF por mês</h2><div id="monthTopContainer" class="month-tabs"></div></article>
+      <article class="panel"><h2>Pontos que melhoraram</h2><div id="improvementList" class="rank-list"></div></article>
+    </section>
+
+    <section class="panel fade-in delay-7">
+      <div class="table-head"><h2>Base técnica filtrável</h2><input id="searchInput" placeholder="Buscar ponto, problema, técnico..." /></div>
+      <div class="table-wrap"><table><thead><tr><th>Mês</th><th>Ponto</th><th>Área</th><th>Técnico</th><th>Ambiente</th><th>Tipo</th><th>Causa</th><th>Status</th></tr></thead><tbody id="dataTable"></tbody></table></div>
+    </section>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>
