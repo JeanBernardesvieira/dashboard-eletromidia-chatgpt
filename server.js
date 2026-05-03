@@ -35,7 +35,7 @@ async function lerAba(nomeAba) {
   const raw  = resp.data;
   const json = JSON.parse(raw.substring(raw.indexOf('{'), raw.lastIndexOf('}') + 1));
   const table = json.table || {};
-  const cols  = (table.cols || []).map(c => c.label || '');
+  const cols  = (table.cols || []).map(c => (c.label || '').trim());
   const rows  = (table.rows || []).map(r =>
     Object.fromEntries(cols.map((col, i) => [col, r.c?.[i]?.v ?? null]))
   );
