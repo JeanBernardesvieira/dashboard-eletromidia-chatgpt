@@ -1,15 +1,16 @@
 {
-  "name": "eletromidia-dashboard-operacional",
+  "name": "dashboard-eletromidia",
   "version": "1.0.0",
-  "description": "Dashboard operacional Eletromidia - análise de pontos OFF, corretivos e preventivos",
+  "description": "Dashboard de Relatórios Técnicos — Eletromidia",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "node server.js"
+    "install": "npm install"
   },
   "dependencies": {
-    "express": "^4.18.3",
-    "papaparse": "^5.4.1"
+    "express": "^4.18.2",
+    "axios": "^1.6.0",
+    "path": "^0.12.7"
   },
   "engines": {
     "node": ">=18"
