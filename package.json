@@ -4,15 +4,13 @@
   "description": "Dashboard de Relatórios Técnicos — Eletromidia",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
-    "install": "npm install"
+    "start": "node server.js"
   },
   "dependencies": {
     "express": "^4.18.2",
-    "axios": "^1.6.0",
-    "path": "^0.12.7"
+    "axios": "^1.6.0"
   },
   "engines": {
-    "node": ">=18"
+    "node": "18.x"
   }
 }
